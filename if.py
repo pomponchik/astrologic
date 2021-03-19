@@ -3,7 +3,7 @@ import inspect
 from functools import wraps
 import textwrap
 import importlib
-from astrologic.decorators.if_switcher import switcher
+from astrologic import switcher
 
 
 c = 'ogogo'
