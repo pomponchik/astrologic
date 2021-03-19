@@ -11,7 +11,7 @@ class A:
     def a(self):
         return 'kek'
 
-    @switcher(a=True, b=True)
+    @switcher(a=True, b=False)
     def func(self, a, b):
         if a:
             print('lol')
@@ -26,7 +26,8 @@ class A:
 def f():
     pass
 
-print(inspect.getsourcelines(f))
+for x in inspect.getsourcelines(A().func)[0]:
+    print(x, end='')
 
 
 #print(ast.dump(ast.parse(inspect.getsource(func)), indent=4))
