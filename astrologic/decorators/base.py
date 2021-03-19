@@ -13,7 +13,9 @@ class BaseDecorator:
             text = FunctionText(func)
             tree = self.get_source_tree(text)
             new_tree = self.change_tree(tree, text, **kwargs)
+            namespace = self.get_globals_by_function(func)
             new_function = self.convert_tree_to_function_function(new_tree, func)
+            new_function = self.edit_result(original_function, new_function, namespace)
             return new_function
         if not len(args):
             return decorator
@@ -24,9 +26,11 @@ class BaseDecorator:
     def change_tree(self, tree, function_text, **kwargs):
         raise NotImplementedError
 
-    def convert_tree_to_function_function(self, tree, original_function):
+    def edit_result(self, original_function, new_function, namespace):
+        return new_function
+
+    def convert_tree_to_function_function(self, tree, original_function, namespace):
         code = compile(tree, filename=inspect.getfile(original_function), mode='exec')
-        namespace = self.get_globals_by_function(original_function)
         exec(code, namespace)
         result = namespace[original_function.__name__]
         result = functools.wraps(original_function)(result)
