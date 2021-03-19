@@ -3,18 +3,15 @@ import inspect
 from functools import wraps
 import textwrap
 import importlib
-from astrologic.decorators.base import BaseDecorator
+from astrologic.decorators.if_switcher import switcher
 
-
-
-fix = BaseDecorator()
 
 c = 'ogogo'
 class A:
     def a(self):
         return 'kek'
 
-    @fix(a=True, b=True)
+    @switcher(a=True, b=True)
     def func(self, a, b):
         if a:
             print('lol')
