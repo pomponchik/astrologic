@@ -3,7 +3,7 @@ from astrologic.decorators.base import BaseDecorator
 
 
 class IfSwitcher(BaseDecorator):
-    def change_tree(self, tree, function_text, **kwargs):
+    def change_tree(self, tree, original_function, function_text, **kwargs):
         class RewriteName(ast.NodeTransformer):
             def visit_If(self, node):
                 try:

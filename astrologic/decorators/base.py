@@ -12,10 +12,10 @@ class BaseDecorator:
         def decorator(func):
             text = FunctionText(func)
             tree = self.get_source_tree(text)
-            new_tree = self.change_tree(tree, text, **kwargs)
-            namespace = self.get_globals_by_function(func)
-            new_function = self.convert_tree_to_function_function(new_tree, func)
-            new_function = self.edit_result(original_function, new_function, namespace)
+            new_tree = self.change_tree(tree, func, text, **kwargs)
+            namespace = self.get_new_namespace(func)
+            new_function = self.convert_tree_to_function(new_tree, func, namespace)
+            new_function = self.edit_result(func, new_function, namespace)
             return new_function
         if not len(args):
             return decorator
@@ -29,7 +29,7 @@ class BaseDecorator:
     def edit_result(self, original_function, new_function, namespace):
         return new_function
 
-    def convert_tree_to_function_function(self, tree, original_function, namespace):
+    def convert_tree_to_function(self, tree, original_function, namespace):
         code = compile(tree, filename=inspect.getfile(original_function), mode='exec')
         exec(code, namespace)
         result = namespace[original_function.__name__]
@@ -37,6 +37,7 @@ class BaseDecorator:
         return result
 
     def get_source_tree(self, text):
+        #print(text.clean_text_with_pre_breaks)
         tree = ast.parse(text.clean_text_with_pre_breaks)
         return tree
 
@@ -51,3 +52,6 @@ class BaseDecorator:
             _object = getattr(module, object_name)
             result[object_name] = _object
         return result
+
+    def get_new_namespace(self, function):
+        return self.get_globals_by_function(function)

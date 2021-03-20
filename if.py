@@ -4,6 +4,7 @@ from functools import wraps
 import textwrap
 import importlib
 from astrologic import switcher
+from astrologic import no_recursion
 
 
 c = 'ogogo'
@@ -23,13 +24,37 @@ class A:
         print(self.a())
 
 
-def f():
-    pass
-
-for x in inspect.getsourcelines(A().func)[0]:
-    print(x, end='')
+#is_recursion = False
 
 
+def func():
+    is_recursion = False
+    def x():
+        nonlocal is_recursion
+        is_recursion = True
+    x()
+    return is_recursion
+
+def func2():
+    return ((), {})
+#for x in inspect.getsourcelines(A().func)[0]:
+#    print(x, end='')
+
+counter = 0
+
+@no_recursion
+def rec():
+    global counter
+    counter += 1
+    if counter != 10000000:
+        return rec()
+    return counter
+#print(ast.dump(ast.parse(inspect.getsource(rec)), indent=4))
+print(rec())
+#print(counter)
+
+#print(func())
 #print(ast.dump(ast.parse(inspect.getsource(func)), indent=4))
+#print(ast.dump(ast.parse(inspect.getsource(func2)), indent=4))
 
-A().func(0, 0)
+#A().func(0, 0)
