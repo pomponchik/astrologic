@@ -43,11 +43,11 @@ def func2():
 counter = 0
 
 @no_recursion
-def rec():
+def recursion():
     global counter
     counter += 1
     if counter != 10000000:
-        return rec()
+        return recursion()
     return counter
 #print(ast.dump(ast.parse(inspect.getsource(rec)), indent=4))
 print(rec())
