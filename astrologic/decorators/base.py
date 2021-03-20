@@ -12,7 +12,8 @@ class BaseDecorator:
         def decorator(func):
             text = FunctionText(func)
             tree = self.get_source_tree(text)
-            new_tree = self.change_tree(tree, func, text, **kwargs)
+            new_args = () if len(args) == 1 and callable(args[0]) else args
+            new_tree = self.change_tree(tree, func, text, *new_args, **kwargs)
             namespace = self.get_new_namespace(func)
             new_function = self.convert_tree_to_function(new_tree, func, namespace)
             new_function = self.edit_result(func, new_function, namespace)
@@ -21,7 +22,7 @@ class BaseDecorator:
             return decorator
         elif len(args) == 1 and callable(args[0]):
             return decorator(args[0])
-        raise ValueError('You are using the decorator incorrectly.')
+        return decorator
 
     def change_tree(self, tree, function_text, **kwargs):
         raise NotImplementedError
@@ -30,6 +31,7 @@ class BaseDecorator:
         return new_function
 
     def convert_tree_to_function(self, tree, original_function, namespace):
+        #print(ast.dump(tree, indent=4))
         code = compile(tree, filename=inspect.getfile(original_function), mode='exec')
         exec(code, namespace)
         result = namespace[original_function.__name__]

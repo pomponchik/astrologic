@@ -55,7 +55,7 @@ class TailRecursionOptimization(BaseDecorator):
         result = functools.wraps(original_function)(result)
         return result
 
-    def change_tree(self, tree, original_function, function_text, **kwargs):
+    def change_tree(self, tree, original_function, function_text, *args, **kwargs):
         self.add_prefix_and_postfix(function_text, original_function)
         tree = ast.fix_missing_locations(self.get_source_tree(function_text))
         class RewriteName(ast.NodeTransformer):

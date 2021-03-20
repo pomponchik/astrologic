@@ -1,22 +1,35 @@
-from astrologic import switcher
+import ast
+import inspect
+from functools import wraps
+import textwrap
+import importlib
+from astrologic import switcher, inline
 import time
-from astrologic import no_recursion
 
 
 
-@no_recursion
-def wrecursion(counter):
-    if counter != 900:
-        return wrecursion(counter + 1)
-    return counter
 
 
-def recursion(counter):
-    if counter != 900:
-        return recursion(counter + 1)
-    return counter
+def a(c):
+    d = c
+    print(d)
+
+@inline('a')
+def b():
+    print('lol')
+    c = 'kek'
+    a(c)
+
+b()
+
+#print(time.time() - start_time)
+#print(ast.dump(ast.parse(inspect.getsource(a)), indent=4))
+#print(rec())
+#print(counter)
 
 
+#print(func())
+#print(ast.dump(ast.parse(inspect.getsource(func)), indent=4))
+#print(ast.dump(ast.parse(inspect.getsource(func2)), indent=4))
 
-for k in range(1000):
-    recursion(0)
+#A().func(0, 0)
