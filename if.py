@@ -11,7 +11,7 @@ import time
 
 
 def a(c):
-    d = c
+    d =c
     print(d)
 
 @inline('a')
@@ -21,6 +21,8 @@ def b():
     a(c)
 
 b()
+
+
 
 #print(time.time() - start_time)
 #print(ast.dump(ast.parse(inspect.getsource(a)), indent=4))

@@ -32,6 +32,8 @@ class BaseDecorator:
 
     def convert_tree_to_function(self, tree, original_function, namespace):
         #print(ast.dump(tree, indent=4))
+        #import astunparse
+        #print(astunparse.unparse(tree))
         code = compile(tree, filename=inspect.getfile(original_function), mode='exec')
         exec(code, namespace)
         result = namespace[original_function.__name__]
