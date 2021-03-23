@@ -1,6 +1,9 @@
 import ast
 import inspect
 import functools
+
+import astunparse
+
 from astrologic.decorators.base import BaseDecorator
 
 
