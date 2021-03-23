@@ -20,9 +20,9 @@ def b():
     c = 'kek'
     a(c)
 
-@no_recursion(debug_mode_on=True)
+@no_recursion
 def c(b):
-    if b == 1000000:
+    if b == 100000000:
         return b
     return c(b + 1)
 
