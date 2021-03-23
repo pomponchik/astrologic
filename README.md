@@ -106,7 +106,6 @@ def function():
 ```python
 from astrologic import no_recursion
 
-counter = 0
 
 @no_recursion
 def c(b):
