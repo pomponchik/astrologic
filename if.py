@@ -10,8 +10,8 @@ import time
 
 
 
-def a(c):
-    d =c
+def a(v):
+    d = v
     print(d)
 
 @inline('a')
