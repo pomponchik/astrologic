@@ -59,7 +59,6 @@ class Inliner(BaseDecorator):
                 result.append(new_node)
         return result
 
-
     def replace_names(self, all_original_names, tree, call_node):
         cached_names = {}
         allowed = {x.id for x in call_node.args}
@@ -76,7 +75,6 @@ class Inliner(BaseDecorator):
         tree = ast.fix_missing_locations(Visiter().visit(tree))
         declarations = self.get_declaration_block(tree, call_node, cached_names)
         return tree, declarations
-
 
     def new_name(self, all_original_names, name, cache):
         if name in cache:

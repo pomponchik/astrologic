@@ -46,9 +46,13 @@ class TailRecursionOptimization(BaseDecorator):
         except:
             return False
 
-    def convert_tree_to_function(self, tree, original_function, namespace):
+    def convert_tree_to_function(self, tree, original_function, namespace, debug_mode_on):
+        if debug_mode_on:
+            print('---------------------')
+            print(f'Function {original_function.__name__} from module {original_function.__module__} changed. Its code is roughly equivalent to the following:')
+            print(astunparse.unparse(tree))
+            print('---------------------')
         tree = ast.fix_missing_locations(tree)
-        #print(ast.dump(tree, indent=4))
         code = compile(tree, filename=inspect.getfile(original_function), mode='exec')
         exec(code, namespace)
         result = namespace['superfunction']
