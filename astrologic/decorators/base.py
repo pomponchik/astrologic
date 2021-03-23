@@ -4,6 +4,8 @@ import functools
 import textwrap
 import importlib
 
+import astunparse
+
 from astrologic.function_text import FunctionText
 
 
@@ -15,7 +17,7 @@ class BaseDecorator:
             new_args = () if len(args) == 1 and callable(args[0]) else args
             new_tree = self.change_tree(tree, func, text, *new_args, **kwargs)
             namespace = self.get_new_namespace(func)
-            new_function = self.convert_tree_to_function(new_tree, func, namespace)
+            new_function = self.convert_tree_to_function(new_tree, func, namespace, kwargs.get('debug_mode_on'))
             new_function = self.edit_result(func, new_function, namespace)
             return new_function
         if not len(args):
@@ -30,10 +32,12 @@ class BaseDecorator:
     def edit_result(self, original_function, new_function, namespace):
         return new_function
 
-    def convert_tree_to_function(self, tree, original_function, namespace):
-        #print(ast.dump(tree, indent=4))
-        import astunparse
-        print(astunparse.unparse(tree))
+    def convert_tree_to_function(self, tree, original_function, namespace, debug_mode_on):
+        if debug_mode_on:
+            print('---------------------')
+            print(f'Function {original_function.__name__} from module {original_function.__module__} changed. Its code is roughly equivalent to the following:')
+            print(astunparse.unparse(tree))
+            print('---------------------')
         code = compile(tree, filename=inspect.getfile(original_function), mode='exec')
         exec(code, namespace)
         result = namespace[original_function.__name__]
@@ -41,7 +45,6 @@ class BaseDecorator:
         return result
 
     def get_source_tree(self, text):
-        #print(text.clean_text_with_pre_breaks)
         tree = ast.parse(text.clean_text_with_pre_breaks)
         return tree
 

@@ -14,7 +14,7 @@ def a(v):
     d = v
     print(d)
 
-@inline('a')
+@inline('a', debug_mode_on=True)
 def b():
     print('lol')
     c = 'kek'

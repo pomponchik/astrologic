@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
-requirements = []
+requirements = ['astunparse==1.6.3']
 
 setup(
     name="astrologic",
-    version="0.0.1",
+    version="0.0.2",
     author="Evgeniy Blinov",
     author_email="zheni-b@yandex.ru",
     description="Автоматическая оптимизация кода на уровне АСТ",
