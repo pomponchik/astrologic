@@ -133,7 +133,7 @@ def kek():
 ```python
 def new_kek():
   print('begin')
-  print('its linux)
+  print('its linux')
   print('end')
 ```
 
