@@ -69,7 +69,7 @@ print(ast.dump(tree, indent=4))
 bytecode = compile(new_tree, filename=inspect.getfile(kek), mode='exec')
 ```
 
-5. Чтобы получить новый объект функции, байт-код с инициализацией функции 'kek' необходимо выполнить. Для этого используем встроенную функцию exec.
+5. Чтобы получить новый объект функции, байт-код с инициализацией функции 'kek' необходимо выполнить. Для этого используем встроенную функцию [```exec()```](https://docs.python.org/3/library/functions.html#exec).
 
 ```python
 namespace = {}
