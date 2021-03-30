@@ -7,21 +7,12 @@ from astrologic.function_text import FunctionText
 
 class Inliner(BaseDecorator):
     def change_tree(self, tree, original_function, function_text, *functions, **kwargs):
-        all_original_names = set()
-        class Visiter(ast.NodeVisitor):
-            def visit(_self, node):
-                try:
-                    if isinstance(node, ast.Name):
-                        all_original_names.add(node.id)
-                except:
-                    pass
-        Visiter().visit(tree)
+        all_original_names = self.get_all_names(tree)
         class VisiterCalls(ast.NodeTransformer):
             def visit_Expr(_self, node):
                 try:
                     value = node.value
                     _node = node
-                    #print(ast.dump(node, indent=4))
                     if isinstance(value, ast.Call):
                         node = value
                         if node.func.id in functions:
@@ -34,8 +25,7 @@ class Inliner(BaseDecorator):
                             return _node
                 except Exception as e:
                     return node
-        new_tree = ast.fix_missing_locations(VisiterCalls().visit(tree))
-        return new_tree
+        return VisiterCalls().visit(tree)
 
     def get_declaration_block(self, function_tree, call, cache):
         result = []

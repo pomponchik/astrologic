@@ -16,7 +16,9 @@ class BaseDecorator:
             tree = self.get_source_tree(text)
             new_args = () if len(args) == 1 and callable(args[0]) else args
             new_tree = self.change_tree(tree, func, text, *new_args, **kwargs)
+            new_tree = ast.fix_missing_locations(new_tree)
             namespace = self.get_new_namespace(func)
+            self.post_created_fill_for_namespace(namespace)
             new_function = self.convert_tree_to_function(new_tree, func, namespace, kwargs.get('debug_mode_on'))
             new_function = self.edit_result(func, new_function, namespace)
             return new_function
@@ -25,6 +27,9 @@ class BaseDecorator:
         elif len(args) == 1 and callable(args[0]):
             return decorator(args[0])
         return decorator
+
+    def post_created_fill_for_namespace(self, namespace):
+        pass
 
     def change_tree(self, tree, function_text, **kwargs):
         raise NotImplementedError
@@ -62,3 +67,15 @@ class BaseDecorator:
 
     def get_new_namespace(self, function):
         return self.get_globals_by_function(function)
+
+    def get_all_names(self, tree):
+        all_original_names = set()
+        class Visiter(ast.NodeVisitor):
+            def visit(_self, node):
+                try:
+                    if isinstance(node, ast.Name):
+                        all_original_names.add(node.id)
+                except:
+                    pass
+        Visiter().visit(tree)
+        return all_original_names

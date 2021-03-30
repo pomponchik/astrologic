@@ -16,8 +16,7 @@ class IfSwitcher(BaseDecorator):
                     return node
                 except:
                     return node
-        new_tree = ast.fix_missing_locations(RewriteName().visit(tree))
-        return new_tree
+        return RewriteName().visit(tree)
 
 
 switcher = IfSwitcher()

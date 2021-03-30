@@ -23,7 +23,6 @@ class TailRecursionOptimization(BaseDecorator):
         function_text.wrapp_clean_text(prefix=prefix, postfix=postfix, indent=1)
 
     def get_new_return_node(self, node):
-
         args = node.value.args
         kwargs = node.value.keywords
         dict_keys = [ast.Constant(value=keyword.arg) for keyword in kwargs]
@@ -73,7 +72,6 @@ class TailRecursionOptimization(BaseDecorator):
                     new_return_node = self.get_new_return_node(node)
                     return [_nonlocal, flag, new_return_node]
                 return node
-        new_tree = ast.fix_missing_locations(RewriteName().visit(tree))
-        return new_tree
+        return RewriteName().visit(tree)
 
 no_recursion = TailRecursionOptimization()

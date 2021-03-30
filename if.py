@@ -26,13 +26,14 @@ def c(b):
         return b
     return c(b + 1)
 
-print(c(1))
+#print(c(1))
 #b()
 
-
+def f():
+    __ifs_register.append(1)
 
 #print(time.time() - start_time)
-#print(ast.dump(ast.parse(inspect.getsource(a)), indent=4))
+print(ast.dump(ast.parse(inspect.getsource(f)), indent=4))
 #print(rec())
 #print(counter)
 
