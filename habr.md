@@ -43,7 +43,7 @@ Python предоставляет программисту огромное пр
 1. Получаем исходный код при помощи функции из модуля [inspect](https://docs.python.org/3/library/inspect.html#inspect.getsource).
 
 ```python
-import inspect
+import ast, inspect
 
 
 source = inspect.getsource(kek)
@@ -52,9 +52,6 @@ source = inspect.getsource(kek)
 2. Заново парсим исходный код, получая на выходе то самое AST.
 
 ```python
-import ast
-
-
 tree = ast.parse(source)
 ```
 
