@@ -147,10 +147,126 @@ def new_kek():
 
 1. Помещаем рекурсивную функцию в другую функцию, внутри которой первая будет вызываться внутри бесконечного цикла.
 2. Правим AST рекурсивной функции. Нам нужно заменить внутри нее вызовы функций с тем же именем на блок ```return```, возвращающий аргументы, которые функция передавала сама себе.
-3. При этом нам нужно как-то отличать ситуацию обычного возвращения переменных из функции от такой вот подмены. Поэтому перед возвратом мы проставляем специальный флаг, обозначающий, что вот это вот сейчас было совсем не обычное возвращение результата работы функции.
+3. При этом нам нужно как-то отличать ситуацию обычного возвращения переменных из функции от такой вот подмены. Поэтому перед возвращением мы проставляем специальный флаг, обозначающий, что вот это вот сейчас было совсем не обычное возвращение результата работы функции, а нечто, символизирующее рекурсивный вызов.
 4. На уровне цикла из п. 1 мы на каждой итерации вызываем измененную функцию и смотрим на флаг. Если флаг "поднят", значит на самом деле функция хотела вызвать сама себя, но в результате исправления что-то вернула. Поэтому мы просто просто переходим на следующую итерацию цикла, и там передаем в функцию то, что она нам вернула. Если же флаг "опущен", значит мы достигли "дна" рекурсии и это тот результат, который мы должны были получить. Возвращаем его. Мы восхитительны!
 
 ![Для тех, кто любит картинки](/pics/recursion.png)
+
+Теперь то же самое, но немного подробнее.
+
+1. Пишем функцию, внутрь которой мы поместим оригинал. Выглядеть она будет примерно так:
+
+```python
+def superfunction(*args, **kwargs):
+    {{kek}}
+    is_recursion = False
+    while True:
+        result = kek(*args, **kwargs)
+        if not is_recursion:
+            return result
+        is_recursion = False
+        args, kwargs = result
+```
+
+В данном примере мы буквально вставим текст исходной функции на место ```{{kek}}```. Да, мы сейчас работаем с кодом как со строкой. Нет, так делать неправильно, и существует более разумные варианты, как это можно сделать. Подскажете в комментариях?
+
+2, 3 и 4. Вставляем текст исходной функции в обертку из п. 1, после чего парсим результат и исправляем AST. Допустим, исходная функция выглядела так:
+
+```python
+def kek(number):
+    if number >= 10000000:
+        return number
+    return kek(number + 1)
+```
+
+Обычно при вызове данной функции поднималось бы исключение, связанное с превышением максимального уровня глубины рекурсии:
+
+```python
+>>> kek(1)
+...
+RecursionError: maximum recursion depth exceeded in comparison
+```
+
+После "вклеивания" в обертку мы получим примерно следующее:
+
+```python
+def superfunction(*args, **kwargs):
+    is_recursion = False
+    def kek(number):
+        if number >= 10000000:
+            return number
+        return kek(number + 1)
+    while True:
+        result = kek(*args, **kwargs)
+        if not is_recursion:
+            return result
+        is_recursion = False
+        args, kwargs = result
+```
+
+Обратите внимание, мы это делаем чисто на уровне текста! На выходе мы получаем переменную, содержащую строку с кодом, показанным выше. Обозначим ее далее как ```text_of_new_code```.
+
+Парсим исправленный код и получаем объект AST:
+
+```python
+temp_tree = ast.fix_missing_locations(text_of_new_code)
+```
+
+Теперь самое время написать класс-обходчик нод дерева, который будет уделять особое внимание нодам с блоками return:
+
+```python
+class RewriteReturns(ast.NodeTransformer):
+    def visit_Return(self, node):
+        if self.is_recursion(original_function.__name__, node):
+            _nonlocal = ast.Nonlocal(names=['is_recursion'])
+            flag = ast.Assign(targets=[ast.Name(id='is_recursion', ctx=ast.Store())], value=ast.Constant(value=True))
+            new_return_node = self.get_new_return_node(node)
+            return [_nonlocal, flag, new_return_node]
+        return node
+
+    def get_new_return_node(self, node):
+        args = node.value.args
+        kwargs = node.value.keywords
+        dict_keys = [ast.Constant(value=keyword.arg) for keyword in kwargs]
+        dict_values = [keyword.value for keyword in kwargs]
+        new_node = ast.Return(
+            value=ast.Tuple(
+                elts=[
+                    ast.Tuple(elts=args, ctx=ast.Load()),
+                    ast.Dict(
+                        keys=dict_keys,
+                        values=dict_values,
+                    ),
+                ], ctx=ast.Load(),
+            ), ctx=ast.Load(),
+        )
+        return new_node
+```
+
+Запустим обход дерева:
+
+```python
+new_tree = RewriteReturns().visit(temp_tree)
+```
+
+Если расшифровать полученное дерево, оно будет представлять примерно такую функцию:
+
+```python
+def superfunction(*args, **kwargs):
+    is_recursion = False
+    def kek(number):
+        if number >= 10000000:
+            return number
+        nonlocal is_recursion
+        is_recursion = True
+        return ((number + 1, ), {})
+    while True:
+        result = kek(*args, **kwargs)
+        if not is_recursion:
+            return result
+        is_recursion = False
+        args, kwargs = result
+```
 
 
 
