@@ -209,7 +209,7 @@ def superfunction(*args, **kwargs):
 Парсим исправленный код и получаем объект AST:
 
 ```python
-temp_tree = ast.fix_missing_locations(text_of_new_code)
+temp_tree = ast.fix_missing_locations(ast.parse(text_of_new_code))
 ```
 
 Теперь самое время написать класс-обходчик нод дерева, который будет уделять особое внимание нодам с блоками return:
