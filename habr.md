@@ -168,7 +168,7 @@ def superfunction(*args, **kwargs):
         args, kwargs = result
 ```
 
-В данном примере мы буквально вставим текст исходной функции на место ```{{kek}}```. Да, мы сейчас работаем с кодом как со строкой. Нет, так делать неправильно, и существует более разумные варианты, как это можно сделать. Если есть идеи, как это можно сделать - может, расскажете в комментариях?
+В данном примере мы буквально вставим текст исходной функции на место ```{{kek}}```. Да, мы сейчас работаем с кодом как со строкой. Нет, так делать неправильно, и существует более разумные варианты, как это можно сделать. Если есть идеи, как - может, расскажете в комментариях?
 
 2, 3 и 4. Вставляем текст исходной функции в обертку из п. 1, после чего парсим результат и исправляем AST. Допустим, исходная функция выглядела так:
 
@@ -217,12 +217,20 @@ temp_tree = ast.fix_missing_locations(ast.parse(text_of_new_code))
 ```python
 class RewriteReturns(ast.NodeTransformer):
     def visit_Return(self, node):
-        if self.is_recursion(original_function.__name__, node):
+        if self.is_recursion('kek', node):
             _nonlocal = ast.Nonlocal(names=['is_recursion'])
             flag = ast.Assign(targets=[ast.Name(id='is_recursion', ctx=ast.Store())], value=ast.Constant(value=True))
             new_return_node = self.get_new_return_node(node)
             return [_nonlocal, flag, new_return_node]
         return node
+
+    def is_recursion(self, function_name, node):
+        try:
+            if node.value.func.id == function_name:
+                return True
+            return False
+        except:
+            return False
 
     def get_new_return_node(self, node):
         args = node.value.args
