@@ -106,7 +106,7 @@ class RewriteIfs(ast.NodeTransformer):
                 else:
                     return node.body
             return node
-        except:
+        except Exception:
             return node
 ```
 
@@ -229,7 +229,7 @@ class RewriteReturns(ast.NodeTransformer):
             if node.value.func.id == function_name:
                 return True
             return False
-        except:
+        except Exception:
             return False
 
     def get_new_return_node(self, node):
