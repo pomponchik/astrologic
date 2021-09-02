@@ -10,30 +10,28 @@ import time
 
 
 
-def a(v):
-    d = v
-    print(d)
+def a(d):
+    c = ' cheburek'
+    c = d + c
+    print(c)
 
-@inline('a')
+@inline('a', debug_mode_on=True)
 def b():
     print('lol')
     c = 'kek'
     a(c)
 
-@no_recursion
-def c(b):
-    if b == 100000000:
-        return b
-    return c(b + 1)
+b()
+
+
 
 #print(c(1))
 #b()
 
-def f():
-    __ifs_register.append(1)
+
 
 #print(time.time() - start_time)
-print(ast.dump(ast.parse(inspect.getsource(f)), indent=4))
+#print(ast.dump(ast.parse(inspect.getsource(f)), indent=4))
 #print(rec())
 #print(counter)
 

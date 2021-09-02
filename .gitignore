@@ -3,3 +3,5 @@ virt
 *.egg-info
 dist
 build
+.DS_Store
+venv

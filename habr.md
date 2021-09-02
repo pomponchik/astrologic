@@ -292,22 +292,18 @@ def superfunction(*args, **kwargs):
 Если мы наивно вставим содержимое одной функции в другую, может получиться примерно следующее. Допустим, у нас есть функция ```a()```, которая выглядит вот так:
 
 ```python
-def a():
-    result = 'kek'
-    print(result)
-    return result
+def a(c):
+    d = c
+    print(d)
 ```
 
 ...и мы решили вставить код этой функции в ```b()```, которая выглядит так:
 
 ```python
 def b():
-    result = 'lol '
-    kek = a()
-    result += kek
-    result += ' cheburek'
-    print(result)
-    return result
+    print('lol')
+    c = 'kek'
+    a(c)
 ```
 
 На выходе получится что-то подобное:
@@ -337,19 +333,28 @@ def b():
 all_original_names = set()
 
 class Visiter(ast.NodeVisitor):
-    def visit(self, node):
-        try:
-            if isinstance(node, ast.Name):
-                all_original_names.add(node.id)
-        except:
-            pass
+    def visit_Name(self, node):
+        all_original_names.add(node.id)
 
 Visiter().visit(tree)
 ```
 
 Обратите внимание, класс для обычного обхода нод AST мы здесь отнаследовали не от ```ast.NodeTransformer```, а от ```ast.NodeVisitor```. Почему нельзя использовать один класс что для просто обхода, что для обхода с заменой нод - я не знаю. Так надо, делайте так, это сказано в доке к модулю [```ast```](https://docs.python.org/3/library/ast.html#ast.NodeVisitor).
 
-Теперь, когда у нас есть набор имен, встречающихся в функции ```b()```, мы можем взглянуть на функцию ```a()```.
+Ну а дальше уже дело техники. Когда у нас есть набор имен, встречающихся в функции ```b()```, мы смотрим на функцию ```a()```, и все пересекающиеся с ```b()``` имена подменяем на сгенерированные автоматически при помощи uuid.
+
+По итогу мы получаем вместо исходной функции ```a()``` нечто подобное:
+
+```python
+all_original_names = set()
+
+class Visiter(ast.NodeVisitor):
+    def visit_Name(self, node):
+        all_original_names.add(node.id)
+
+Visiter().visit(tree)
+```
+
 
 
 
