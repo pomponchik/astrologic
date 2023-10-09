@@ -40,9 +40,6 @@ class FrozenIfs(BaseDecorator):
         args, kwargs = result""".replace('\t', function_text.indent_symbols)
         function_text.wrapp_clean_text(prefix=prefix, postfix=postfix, indent=1)
 
-    def post_created_fill_for_namespace(self, namespace):
-        def __new_call__(args, kvargs)
-
 
 def superfunction(*args, **kwargs):
     __ast_container = []
