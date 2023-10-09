@@ -1,4 +1,11 @@
-# Astrologic - автоматическая оптимизация кода на уровне AST
+![logo](https://raw.githubusercontent.com/pomponchik/astrologic/develop/docs/assets/logo_3.png)
+
+[![Downloads](https://static.pepy.tech/badge/astrologic/month)](https://pepy.tech/project/astrologic)
+[![Downloads](https://static.pepy.tech/badge/astrologic)](https://pepy.tech/project/astrologic)
+[![codecov](https://codecov.io/gh/pomponchik/astrologic/graph/badge.svg?token=GC8NH2FGJ9)](https://codecov.io/gh/pomponchik/astrologic)
+[![Test-Package](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml/badge.svg)](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml)
+[![Python versions](https://img.shields.io/pypi/pyversions/astrologic.svg)](https://pypi.python.org/pypi/astrologic)
+[![PyPI version](https://badge.fury.io/py/astrologic.svg)](https://badge.fury.io/py/astrologic)
 
 
 Пакет Astrologic содержит ряд инструментов, позволяющих "в рантайме" оптимизировать работу ваших функций или даже конструировать новые функции. Все это достигается за счет парсинга и преобразования [AST](https://docs.python.org/3/library/ast.html) исходной функции. Парсинг происходит полностью "под капотом" и невидим для пользователя.
