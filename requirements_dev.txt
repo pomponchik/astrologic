@@ -3,5 +3,5 @@ pip==23.2.1
 twine==4.0.2
 pyparsing>=2.0.2
 pytest==7.4.2
-coverage==7.3.2
+coverage==7.2.7
 astunparse==1.6.3
