@@ -1,7 +1,7 @@
-wheel==0.33.1
-pip==19.0.3
-twine==1.13.0
+wheel==0.41.2
+pip==23.2.1
+twine==4.0.2
 pyparsing>=2.0.2
-pytest==6.2.2
-coverage==5.5
+pytest==7.4.2
+coverage==7.3.2
 astunparse==1.6.3
