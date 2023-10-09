@@ -7,7 +7,7 @@ requirements = ['astunparse==1.6.3']
 
 setup(
     name='astrologic',
-    version='0.0.4',
+    version='0.0.5',
     author='Evgeniy Blinov',
     author_email='zheni-b@yandex.ru',
     description='Автоматическая оптимизация кода на уровне АСТ',
