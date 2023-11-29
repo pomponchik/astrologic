@@ -14,7 +14,7 @@ class IfSwitcher(BaseDecorator):
                         else:
                             return node.body
                     return node
-                except:
+                except Exception:
                     return node
         return RewriteName().visit(tree)
 
