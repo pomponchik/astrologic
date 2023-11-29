@@ -23,7 +23,7 @@ class Inliner(BaseDecorator):
                             return declarations + new_block
                         else:
                             return _node
-                except Exception as e:
+                except Exception:
                     return node
         return VisiterCalls().visit(tree)
 
@@ -60,7 +60,7 @@ class Inliner(BaseDecorator):
                         new_name = self.new_name(all_original_names, name, cached_names)
                         node.id = new_name
                     return node
-                except Exception as e:
+                except Exception:
                     return node
         tree = ast.fix_missing_locations(Visiter().visit(tree))
         declarations = self.get_declaration_block(tree, call_node, cached_names)
@@ -69,7 +69,7 @@ class Inliner(BaseDecorator):
     def new_name(self, all_original_names, name, cache):
         if name in cache:
             return cache[name]
-        number = 0
+        
         while True:
             new_name = 'generated_' + uuid.uuid4().hex
             if new_name not in all_original_names:

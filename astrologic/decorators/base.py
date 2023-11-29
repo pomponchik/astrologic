@@ -1,7 +1,6 @@
 import ast
 import inspect
 import functools
-import textwrap
 import importlib
 
 import astunparse
@@ -75,7 +74,7 @@ class BaseDecorator:
                 try:
                     if isinstance(node, ast.Name):
                         all_original_names.add(node.id)
-                except:
+                except Exception:
                     pass
         Visiter().visit(tree)
         return all_original_names

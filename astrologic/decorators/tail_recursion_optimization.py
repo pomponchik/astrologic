@@ -10,8 +10,7 @@ from astrologic.decorators.base import BaseDecorator
 class TailRecursionOptimization(BaseDecorator):
     @staticmethod
     def add_prefix_and_postfix(function_text, original_function):
-        function_name = original_function.__name__
-        prefix = f"""def superfunction(*args, **kwargs):
+        prefix = """def superfunction(*args, **kwargs):
     is_recursion = False
 """
         postfix = f"""    while True:
@@ -45,7 +44,7 @@ class TailRecursionOptimization(BaseDecorator):
             if node.value.func.id == function_name:
                 return True
             return False
-        except:
+        except Exception:
             return False
 
     def convert_tree_to_function(self, tree, original_function, namespace, debug_mode_on):

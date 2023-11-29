@@ -6,6 +6,7 @@
 [![Test-Package](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml/badge.svg)](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml)
 [![Python versions](https://img.shields.io/pypi/pyversions/astrologic.svg)](https://pypi.python.org/pypi/astrologic)
 [![PyPI version](https://badge.fury.io/py/astrologic.svg)](https://badge.fury.io/py/astrologic)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 
 Пакет Astrologic содержит ряд инструментов, позволяющих "в рантайме" оптимизировать работу ваших функций или даже конструировать новые функции. Все это достигается за счет парсинга и преобразования [AST](https://docs.python.org/3/library/ast.html) исходной функции. Парсинг происходит полностью "под капотом" и невидим для пользователя.
