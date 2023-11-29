@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/pomponchik/astrologic/develop/docs/assets/logo_3.png)
+![logo](https://raw.githubusercontent.com/pomponchik/astrologic/main/docs/assets/logo_3.png)
 
 [![Downloads](https://static.pepy.tech/badge/astrologic/month)](https://pepy.tech/project/astrologic)
 [![Downloads](https://static.pepy.tech/badge/astrologic)](https://pepy.tech/project/astrologic)
