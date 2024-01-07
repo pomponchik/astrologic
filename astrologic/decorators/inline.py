@@ -12,20 +12,22 @@ class Inliner(BaseDecorator):
         all_original_names: Set[str] = self.get_all_names(tree)
 
         class VisiterCalls(ast.NodeTransformer):
-            def visit_Expr(_self, node):
+            def visit_Expr(_self, node: ast.Expr) -> Optional[Union[ast.AST, List[ast.AST]]]:
                 try:
                     value = node.value
                     _node = node
+
                     if isinstance(value, ast.Call):
                         node = value
-                        if node.func.id in functions:
-                            function_name = node.func.id
+                        if node.func.id in functions:  # type: ignore[attr-defined]
+                            function_name = node.func.id  # type: ignore[attr-defined]
                             function_tree = self.get_function_tree(function_name, original_function.__module__)
                             new_block, declarations = self.replace_names(all_original_names, function_tree, node)
                             new_block = new_block.body[0].body
                             return declarations + new_block
                         else:
                             return _node
+
                 except Exception:
                     return node
 

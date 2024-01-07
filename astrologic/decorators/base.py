@@ -57,6 +57,7 @@ class BaseDecorator:
             module = importlib.import_module(module_name)
         except ModuleNotFoundError:
             return {}
+        
         result = {}
         for object_name in dir(module):
             _object = getattr(module, object_name)
