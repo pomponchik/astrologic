@@ -3,7 +3,7 @@
 [![Downloads](https://static.pepy.tech/badge/astrologic/month)](https://pepy.tech/project/astrologic)
 [![Downloads](https://static.pepy.tech/badge/astrologic)](https://pepy.tech/project/astrologic)
 [![codecov](https://codecov.io/gh/pomponchik/astrologic/graph/badge.svg?token=GC8NH2FGJ9)](https://codecov.io/gh/pomponchik/astrologic)
-[![Test-Package](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml/badge.svg)](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml)
+[![Tests](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml/badge.svg)](https://github.com/pomponchik/astrologic/actions/workflows/tests_and_coverage.yml)
 [![Python versions](https://img.shields.io/pypi/pyversions/astrologic.svg)](https://pypi.python.org/pypi/astrologic)
 [![PyPI version](https://badge.fury.io/py/astrologic.svg)](https://badge.fury.io/py/astrologic)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
