@@ -1,10 +1,12 @@
 import ast
 import inspect
 import functools
+from typing import Callable, Dict, Any
 
 import astunparse
 
 from astrologic.decorators.base import BaseDecorator
+from astrologic.function_text import FunctionText
 
 
 class TailRecursionOptimization(BaseDecorator):
@@ -39,30 +41,31 @@ class TailRecursionOptimization(BaseDecorator):
         )
         return new_node
 
-    def is_recursion(self, function_name, node):
+    def is_recursion(self, function_name: str, node: ast.AST) -> bool:
         try:
-            if node.value.func.id == function_name:
-                return True
-            return False
+            return node.value.func.id == function_name
+
         except Exception:
             return False
 
-    def convert_tree_to_function(self, tree, original_function, namespace, debug_mode_on):
+    def convert_tree_to_function(self, tree: ast.AST, original_function: Callable[..., Any], namespace: Dict[str, Any], debug_mode_on: bool) -> Callable[..., Any]:
         if debug_mode_on:
             print('---------------------')
             print(f'Function {original_function.__name__} from module {original_function.__module__} changed. Its code is roughly equivalent to the following:')
             print(astunparse.unparse(tree))
             print('---------------------')
+
         tree = ast.fix_missing_locations(tree)
         code = compile(tree, filename=inspect.getfile(original_function), mode='exec')
         exec(code, namespace)
-        result = namespace['superfunction']
+        result: Callable[..., Any] = namespace['superfunction']
         result = functools.wraps(original_function)(result)
         return result
 
-    def change_tree(self, tree, original_function, function_text, *args, **kwargs):
+    def change_tree(self, tree: ast.AST, original_function: Callable[..., Any], function_text: FunctionText, *args: Any, **kwargs: Any):
         self.add_prefix_and_postfix(function_text, original_function)
         tree = ast.fix_missing_locations(self.get_source_tree(function_text))
+
         class RewriteName(ast.NodeTransformer):
             def visit_Return(_self, node):
                 if self.is_recursion(original_function.__name__, node):
@@ -71,6 +74,8 @@ class TailRecursionOptimization(BaseDecorator):
                     new_return_node = self.get_new_return_node(node)
                     return [_nonlocal, flag, new_return_node]
                 return node
+
         return RewriteName().visit(tree)
+
 
 no_recursion = TailRecursionOptimization()
