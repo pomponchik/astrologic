@@ -11,6 +11,9 @@ authors = [
 description = 'Автоматическая оптимизация кода на уровне АСТ'
 readme = 'README.md'
 requires-python = '>=3.7'
+dependencies = [
+    'astunparse==1.6.3',
+]
 classifiers = [
   'Operating System :: MacOS :: MacOS X',
   'Operating System :: Microsoft :: Windows',
