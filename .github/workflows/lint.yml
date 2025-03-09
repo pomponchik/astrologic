@@ -25,4 +25,4 @@ jobs:
 
     - name: Run ruff
       shell: bash
-      run: ruff astrologic
+      run: ruff check astrologic
